@@ -1,0 +1,173 @@
+goal: >
+  계약서(PDF/DOCX/TXT)를 업로드하면 위험 조항을 자동 탐지·구조화하고,
+  사내 표준 조항 라이브러리와 RAG로 비교해 대안 문구를 추천하며,
+  외부 최신 규정 검색 및 내부 정책 Tool Calling까지 지원하는
+  법무 문서 검토 보조 Streamlit 웹앱을 구현한다.
+
+constraints:
+  - Python >= 3.11
+  - LLM: OpenAI GPT-5o-mini (API 키 환경변수 OPENAI_API_KEY)
+  - Embedding: OpenAI text-embedding-3-small (동일 API 키)
+  - VectorDB: ChromaDB (로컬, 디스크 퍼시스턴스)
+  - Chain 아키텍처: LangGraph (에이전트 파이프라인, agentic RAG)
+  - 문서 파싱: LangChain DocumentLoader (PyPDFLoader, Docx2txtLoader 등)
+  - 외부 검색: Tavily Search API (TAVILY_API_KEY 환경변수)
+  - 내부 정책 DB: JSON 파일 (policies/company_policies.json)
+  - 표준 조항 라이브러리: 개발자 작성 시드 데이터 (data/standard_clauses.json)
+  - UI: Streamlit 멀티탭 (업로드 / 분석 / 라이브러리 / 내보내기)
+  - 배포: 로컬 실행 전용 (streamlit run app.py)
+  - 인증: 없음 (1인 로컬 사용)
+  - 파일 관리: 세션 유지 → 앱 종료 시 임시 파일 삭제
+  - 외부 클라우드 DB 사용 금지
+  - 법률 자문 단정 표현 사용 금지 (면책 문구 필수)
+
+acceptance_criteria:
+  - PDF 또는 DOCX 파일 업로드 시 텍스트 추출 후 리스크 항목(High/Medium/Low)이 카드 형태로 화면에 표시된다
+  - 각 리스크 항목은 clause_category, risk_level, issue_summary, evidence(원문 인용), why_it_matters, questions_to_ask, recommended_action 필드를 포함한 구조화 JSON으로 추출된다
+  - 분석 결과를 마크다운 리포트 및 JSON 파일로 다운로드할 수 있다
+  - 리스크 항목 클릭 시 ChromaDB RAG로 표준 조항 Top-3를 검색하여 현재 문구 vs 표준 문구 vs 추천 수정안을 나란히 표시한다
+  - Tavily API를 통해 외부 최신 규정/가이드라인을 검색하고 출처 링크와 함께 요약을 제공한다
+  - LangGraph Tool Calling으로 company_policies.json을 조회하여 사내 정책과의 충돌 여부를 응답한다
+  - 한국어 및 영어 계약서 모두 처리 가능하다
+  - 동일 문서 재분석 시 캐시(해시 기반)를 활용하여 불필요한 LLM 호출을 방지한다
+
+ontology_schema:
+  name: ContractReviewApp
+  description: 계약서 법무 검토 보조 웹앱 도메인 모델
+  fields:
+    - name: ContractDocument
+      type: object
+      description: 업로드된 계약서 문서
+      fields:
+        - name: file_name
+          type: string
+        - name: file_hash
+          type: string
+          description: 중복 분석 방지용 SHA-256 해시
+        - name: raw_text
+          type: string
+        - name: clauses
+          type: array
+          description: 분리된 조항/섹션 목록
+
+    - name: RiskFinding
+      type: object
+      description: 위험 조항 분석 결과 단위
+      fields:
+        - name: clause_category
+          type: enum
+          values: [Liability, Termination, Confidentiality, IP, Payment, GoverningLaw, Warranty, Indemnity, DataPrivacy, AutoRenewal, Subcontracting, Other]
+        - name: risk_level
+          type: enum
+          values: [High, Medium, Low]
+        - name: issue_summary
+          type: string
+        - name: evidence
+          type: string
+          description: 원문 인용 + 조항 번호/페이지
+        - name: why_it_matters
+          type: string
+        - name: questions_to_ask
+          type: array
+          item_type: string
+        - name: recommended_action
+          type: enum
+          values: [수정, 협상, 확인]
+        - name: confidence
+          type: float
+          description: 0.0 ~ 1.0, 추출 신뢰도
+
+    - name: StandardClause
+      type: object
+      description: 표준 조항 라이브러리 항목
+      fields:
+        - name: id
+          type: string
+        - name: category
+          type: string
+        - name: title
+          type: string
+        - name: template_text
+          type: string
+        - name: guidance
+          type: string
+        - name: version
+          type: string
+        - name: metadata
+          type: object
+
+    - name: CompanyPolicy
+      type: object
+      description: 사내 정책 항목 (JSON 파일)
+      fields:
+        - name: policy_name
+          type: string
+        - name: category
+          type: string
+        - name: rule
+          type: string
+        - name: examples
+          type: array
+
+    - name: AnalysisReport
+      type: object
+      description: 최종 검토 리포트
+      fields:
+        - name: document_name
+          type: string
+        - name: contract_type
+          type: enum
+          values: [NDA, Service, License, Sales, Other]
+        - name: parties
+          type: object
+        - name: findings
+          type: array
+          item_type: RiskFinding
+        - name: generated_at
+          type: datetime
+        - name: markdown_report
+          type: string
+        - name: json_export
+          type: object
+
+evaluation_principles:
+  - name: 근거 기반 응답
+    weight: 0.30
+    description: 모든 리스크 판단은 원문 인용(evidence)을 포함해야 하며, 근거 없는 단정 불가
+  - name: 구조화 정확도
+    weight: 0.25
+    description: PydanticOutputParser 스키마를 100% 준수, 필수 필드 누락 없음
+  - name: RAG 관련성
+    weight: 0.20
+    description: 표준 조항 검색 결과가 쿼리 조항과 카테고리/내용 면에서 실질적으로 관련 있어야 함
+  - name: 다국어 처리
+    weight: 0.15
+    description: 한국어/영어 계약서 모두 동일 품질로 처리
+  - name: 사용성
+    weight: 0.10
+    description: Streamlit UI에서 5단계 이내로 리포트 생성 완료 가능
+
+exit_conditions:
+  - 모든 acceptance_criteria 항목이 샘플 계약서(NDA, 용역계약서)로 수동 검증 완료
+  - LangGraph 에이전트 파이프라인이 오류 없이 end-to-end 실행 완료
+  - JSON 및 마크다운 다운로드 파일이 정상 생성됨
+  - 캐시 히트 시 재분석이 생략되고 이전 결과가 즉시 표시됨
+
+metadata:
+  version: "1.0.0"
+  created_at: "2026-04-04"
+  ambiguity_score: 0.08
+  source: interview-session-manual
+  interview_summary:
+    llm: gpt-5o-mini
+    embedding: text-embedding-3-small
+    vectordb: chromadb-local
+    chain_framework: langgraph
+    doc_parser: langchain-document-loader
+    external_search: tavily
+    internal_db: json-file
+    standard_library: manual-seed-json
+    deployment: local-only
+    auth: none
+    language: multilingual-ko-en
+    file_cleanup: session-based

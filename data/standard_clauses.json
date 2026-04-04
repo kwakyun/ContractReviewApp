@@ -1,0 +1,110 @@
+[
+  {
+    "id": "SC-001",
+    "category": "Liability",
+    "title": "책임 한도 표준 조항",
+    "template_text": "어느 일방 당사자의 상대방에 대한 손해배상 책임은 본 계약 위반이 발생한 날로부터 직전 12개월간 상대방이 지급한 계약 대금 총액을 초과하지 아니한다. 단, 고의 또는 중과실로 인한 손해, 사망 또는 신체 상해, 지식재산권 침해로 인한 손해의 경우에는 본 한도가 적용되지 아니한다.",
+    "guidance": "책임 한도는 계약 대금의 1년치 이내로 설정하는 것이 표준입니다. 고의/중과실, IP 침해는 반드시 예외로 명시하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "License", "Sales"], "risk_level": "High" }
+  },
+  {
+    "id": "SC-002",
+    "category": "Liability",
+    "title": "간접손해 면책 표준 조항",
+    "template_text": "당사자 일방은 상대방에 대하여 본 계약과 관련하여 발생하는 영업 손실, 데이터 손실, 기회 비용, 평판 손해 등 간접 손해, 결과적 손해, 특별 손해에 대하여 책임을 지지 아니한다.",
+    "guidance": "간접손해 면책 조항은 표준적으로 포함되어야 합니다. 단, 상대방이 요구하는 경우 상호 적용을 명확히 하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "License"], "risk_level": "Medium" }
+  },
+  {
+    "id": "SC-003",
+    "category": "Termination",
+    "title": "계약 해지 표준 조항",
+    "template_text": "각 당사자는 상대방이 본 계약의 중요한 조항을 위반하고 서면 통지를 받은 날로부터 30일 이내에 이를 치유하지 아니하는 경우, 서면 통지로써 본 계약을 해지할 수 있다. 단, 치유 불가능한 위반의 경우 즉시 해지할 수 있다.",
+    "guidance": "치유 기간(cure period)은 통상 30일이 표준입니다. 일방적 즉시 해지 조항은 상호주의 원칙을 확인하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "License", "NDA", "Sales"], "risk_level": "High" }
+  },
+  {
+    "id": "SC-004",
+    "category": "Termination",
+    "title": "편의에 의한 계약 해지 표준 조항",
+    "template_text": "각 당사자는 상대방에게 60일 이전에 서면 통지함으로써 이유 없이(for convenience) 본 계약을 해지할 수 있다. 해지 시 이미 제공된 서비스에 대한 보수는 지급되어야 한다.",
+    "guidance": "편의 해지는 상호 동일한 조건으로 설정하세요. 사전 통지 기간은 최소 30~90일 범위가 표준입니다.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service"], "risk_level": "Medium" }
+  },
+  {
+    "id": "SC-005",
+    "category": "Confidentiality",
+    "title": "비밀유지 표준 조항",
+    "template_text": "각 당사자(수령인)는 상대방(공개인)으로부터 제공받은 비밀정보를 동일한 수준의 주의로 보호하되, 최소한 합리적인 주의를 기울여야 하며, 공개인의 사전 서면 동의 없이 제3자에게 공개하거나 본 계약 목적 외로 사용하여서는 아니 된다. 비밀유지 의무는 계약 종료 후 3년간 존속한다.",
+    "guidance": "비밀유지 기간은 계약 종료 후 2~5년이 표준입니다. 법령에 의한 공개 의무는 예외로 명시하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["NDA", "Service", "License"], "risk_level": "Medium" }
+  },
+  {
+    "id": "SC-006",
+    "category": "IP",
+    "title": "지식재산권 귀속 표준 조항",
+    "template_text": "본 계약에 따라 용역 수행 중 개발된 결과물의 지식재산권은 대금을 완납한 시점에 발주자에게 귀속된다. 단, 수행사가 기존에 보유하고 있던 지식재산권(Background IP)은 수행사에 귀속되며, 발주자는 계약 목적 범위 내에서 이를 사용할 수 있는 비독점적 라이선스를 부여받는다.",
+    "guidance": "Background IP와 Foreground IP를 명확히 구분하세요. 오픈소스 컴포넌트 사용 여부도 함께 확인하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "License"], "risk_level": "High" }
+  },
+  {
+    "id": "SC-007",
+    "category": "Payment",
+    "title": "대금 지급 및 연체 이자 표준 조항",
+    "template_text": "발주자는 청구서 수령일로부터 30일 이내에 계약 대금을 지급하여야 한다. 기한 내 미지급 시 미지급액에 대해 연 6%의 지연이자가 발생한다. 분쟁 중인 금액에 대해서는 분쟁 해결 시까지 지연이자가 발생하지 아니한다.",
+    "guidance": "지급 기한 30일, 연체이자 연 6%가 일반적인 표준입니다. 분쟁 금액에 대한 이자 면제 조항을 포함하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "Sales"], "risk_level": "Medium" }
+  },
+  {
+    "id": "SC-008",
+    "category": "GoverningLaw",
+    "title": "준거법 및 관할 표준 조항",
+    "template_text": "본 계약은 대한민국 법률에 따라 해석되고 규율된다. 본 계약과 관련된 분쟁은 먼저 당사자 간 협의로 해결하며, 협의 불성립 시 서울중앙지방법원을 제1심 전속 관할 법원으로 한다.",
+    "guidance": "국내 계약은 서울중앙지방법원, 국제 계약은 ICC 중재 등 중재 조항을 고려하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "NDA", "License", "Sales"], "risk_level": "Low" }
+  },
+  {
+    "id": "SC-009",
+    "category": "DataPrivacy",
+    "title": "개인정보 처리 표준 조항",
+    "template_text": "수행사가 본 계약 이행 과정에서 발주자의 개인정보를 처리하는 경우, 수행사는 개인정보 보호법 및 관련 법령을 준수하여야 한다. 수행사는 계약 목적 이외의 목적으로 개인정보를 처리할 수 없으며, 계약 종료 시 지체 없이 개인정보를 파기하여야 한다.",
+    "guidance": "개인정보처리위탁 계약서(별첨)를 체결하세요. 국외 이전 시 별도 동의 절차가 필요합니다.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "License"], "risk_level": "High" }
+  },
+  {
+    "id": "SC-010",
+    "category": "AutoRenewal",
+    "title": "자동 갱신 표준 조항",
+    "template_text": "본 계약의 유효기간은 계약 체결일로부터 1년으로 한다. 만료일 30일 전까지 어느 일방이 서면으로 계약 종료 의사를 통지하지 아니하는 경우, 본 계약은 동일한 조건으로 1년씩 자동 갱신된다.",
+    "guidance": "자동 갱신 조항은 갱신 거부 통지 기한(통상 30~90일)과 통지 방법을 명확히 하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "License"], "risk_level": "Medium" }
+  },
+  {
+    "id": "SC-011",
+    "category": "Indemnity",
+    "title": "손해배상 및 방어 의무 표준 조항",
+    "template_text": "수행사는 수행사의 귀책사유로 인하여 제3자가 발주자에 대해 제기하는 청구, 소송, 손해에 대하여 발주자를 방어하고 면책하여야 한다. 발주자는 수행사에게 그러한 청구에 대한 통지를 지체 없이 제공하고 방어에 합리적으로 협조하여야 한다.",
+    "guidance": "면책 의무(indemnity)는 상호 적용 여부를 확인하세요. 지식재산권 침해 면책 조항을 별도로 두는 것이 권장됩니다.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "License", "Sales"], "risk_level": "High" }
+  },
+  {
+    "id": "SC-012",
+    "category": "Warranty",
+    "title": "품질 보증 표준 조항",
+    "template_text": "수행사는 납품물이 계약서에 명시된 사양을 충족하고, 전문적인 방법으로 제작되었으며, 수행사가 인지하는 범위 내에서 제3자의 지식재산권을 침해하지 않음을 보증한다. 상기 보증을 위반하는 경우 수행사는 하자를 보완하거나 대금을 환불하여야 한다.",
+    "guidance": "보증 기간(통상 납품 후 1년)을 명확히 하고, 보증 범위를 계약 목적에 맞게 조정하세요.",
+    "version": "1.0",
+    "metadata": { "applicable_contracts": ["Service", "Sales"], "risk_level": "Medium" }
+  }
+]
