@@ -1,0 +1,13 @@
+name: Entry docs check
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check entry document structure and local links
+        run: node scripts/check-docs.cjs
